@@ -1,12 +1,41 @@
-
 import Section from "@/components/Section";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { exhibitionData } from "@/lib/data";
-import { Building, ShoppingBag, Stethoscope, GraduationCap, Baby, Users } from "lucide-react";
+import { Building, ShoppingBag, Stethoscope, GraduationCap, Baby, Users, Clock, MapPin, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const Partners = () => {
   const { partners } = exhibitionData;
+  
+  // Countdown timer state
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+
+  // Countdown timer effect
+  useEffect(() => {
+    const targetDate = new Date('2025-08-24T09:00:00').getTime();
+    
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+      
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((difference % (1000 * 60)) / 1000)
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const partnerCategories = [
     {
@@ -63,6 +92,48 @@ const Partners = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Countdown Timer Section */}
+      <Section className="pt-4 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 text-white">
+        <motion.div 
+          className="text-center space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="mx-auto w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4">
+              <Clock className="h-8 w-8 text-white" />
+            </div>
+          </motion.div>
+          
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">Exhibition Starts In</h2>
+          
+          <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
+            {[
+              { value: timeLeft.days, label: 'Days' },
+              { value: timeLeft.hours, label: 'Hours' },
+              { value: timeLeft.minutes, label: 'Minutes' },
+              { value: timeLeft.seconds, label: 'Seconds' }
+            ].map((item, index) => (
+              <motion.div
+                key={item.label}
+                className="bg-white/20 backdrop-blur-sm rounded-lg p-4"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+              >
+                <div className="text-2xl md:text-3xl font-bold">{item.value}</div>
+                <div className="text-sm opacity-90">{item.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </Section>
+
       {/* Header Section */}
       <Section className="pt-8 bg-gradient-to-br from-pink-100 via-blue-50 to-amber-50">
         <motion.div 
@@ -98,7 +169,7 @@ const Partners = () => {
         </motion.div>
       </Section>
 
-      {/* Co-organizer Section */}
+      {/* Organizing Companies Section */}
       <Section className="bg-gradient-to-r from-blue-50 to-pink-50">
         <motion.div 
           className="text-center space-y-8"
@@ -107,43 +178,76 @@ const Partners = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-gray-800 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-100 to-pink-100 rounded-full flex items-center justify-center mb-6">
-              <Users className="h-10 w-10 text-blue-600" />
-            </div>
-          </motion.div>
-          
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-          >
-            وهذا شعار الشريك
+            Organizing Partners
           </motion.h2>
           
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Main Organizer */}
+            <motion.div 
+              className="bg-white rounded-xl shadow-lg p-8 border-2 border-pink-200"
+              initial={{ opacity: 0, scale: 0.9, x: -50 }}
+              whileInView={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center">
+                  <Building className="h-10 w-10 text-pink-600" />
+                </div>
+                <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+                  الشركة المنظمة
+                </div>
+                <div className="text-xl font-bold text-gray-800 leading-tight">
+                  شركة ليبيا اللوجستية <br /> لتنظيم المعارض
+                </div>
+                <div className="w-16 h-1 bg-gradient-to-r from-pink-500 to-blue-500 mx-auto rounded-full"></div>
+              </div>
+            </motion.div>
+
+            {/* Co-organizer */}
+            <motion.div 
+              className="bg-white rounded-xl shadow-lg p-8 border-2 border-blue-200"
+              initial={{ opacity: 0, scale: 0.9, x: 50 }}
+              whileInView={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className="space-y-4">
+                <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
+                  <Users className="h-10 w-10 text-blue-600" />
+                </div>
+                <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+                  Co-organizer
+                </div>
+                <div className="text-xl font-bold text-gray-800">
+                  SERKAN ATICI
+                </div>
+                <div className="w-16 h-1 bg-gradient-to-r from-blue-500 to-pink-500 mx-auto rounded-full"></div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Connection Visual */}
           <motion.div 
-            className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="flex justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
             viewport={{ once: true }}
-            whileHover={{ scale: 1.05 }}
           >
-            <div className="space-y-4">
-              <div className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-                Co-organizer
-              </div>
-              <div className="text-2xl font-bold text-gray-800">
-                SERKAN ATICI
-              </div>
-              <div className="w-16 h-1 bg-gradient-to-r from-pink-500 to-blue-500 mx-auto rounded-full"></div>
+            <div className="flex items-center space-x-4 text-gray-400">
+              <div className="w-8 h-1 bg-gradient-to-r from-pink-300 to-blue-300 rounded-full"></div>
+              <div className="w-3 h-3 bg-gradient-to-br from-pink-400 to-blue-400 rounded-full"></div>
+              <div className="w-8 h-1 bg-gradient-to-r from-blue-300 to-pink-300 rounded-full"></div>
             </div>
           </motion.div>
         </motion.div>
@@ -227,6 +331,81 @@ const Partners = () => {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+      </Section>
+
+      {/* Location Map Section */}
+      <Section className="bg-gradient-to-br from-gray-50 to-blue-50">
+        <motion.div 
+          className="text-center space-y-8"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-100 to-pink-100 rounded-full flex items-center justify-center mb-6">
+              <MapPin className="h-10 w-10 text-blue-600" />
+            </div>
+          </motion.div>
+          
+          <motion.h2 
+            className="text-3xl md:text-4xl font-bold text-gray-800 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            Exhibition Location
+          </motion.h2>
+          
+          <motion.div 
+            className="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            <div className="space-y-6">
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-semibold text-gray-800">Hawari Exhibition Center</h3>
+                <p className="text-gray-600">Benghazi, Libya</p>
+                <div className="flex items-center justify-center space-x-2 text-blue-600">
+                  <Calendar className="h-4 w-4" />
+                  <span>August 24–26, 2025</span>
+                </div>
+              </div>
+              
+              <div className="w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3347.7982!2d20.1234567!3d32.1234567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sBenghazi%2C%20Libya!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Exhibition Location"
+                ></iframe>
+              </div>
+              
+              <div className="text-center">
+                <p className="text-gray-600 mb-4">
+                  Located in the heart of Benghazi, easily accessible by all major transportation routes.
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 text-sm text-gray-500">
+                  <span className="bg-gray-100 px-3 py-1 rounded-full">🚗 Parking Available</span>
+                  <span className="bg-gray-100 px-3 py-1 rounded-full">🚌 Public Transport</span>
+                  <span className="bg-gray-100 px-3 py-1 rounded-full">♿ Accessible</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
       </Section>
 
