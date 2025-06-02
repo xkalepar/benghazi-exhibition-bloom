@@ -60,8 +60,19 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-pink-200 mt-8 pt-8 text-center text-gray-600">
-          <p>&copy; 2025 Libya Mother & Child Exhibition. All rights reserved.</p>
+        <div className="border-t border-pink-200 mt-8 pt-8 text-center space-y-2">
+          <p className="text-gray-600">&copy; 2025 Libya Mother & Child Exhibition. All rights reserved.</p>
+          <p className="text-sm text-gray-500">
+            Built by{" "}
+            <a 
+              href="https://ebtkar.tech" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-pink-600 hover:text-pink-700 font-medium transition-colors"
+            >
+              Ebtkar Tqni
+            </a>
+          </p>
         </div>
       </div>
     </footer>
